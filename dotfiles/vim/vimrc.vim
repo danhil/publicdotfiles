@@ -18,73 +18,11 @@ call vundle#begin()
 " vundle will add the plugin folders to the runtimepath only after it has seen
 " the plugin's Plugin command.
 
-Plugin 'FSwitch'
-Plugin 'FuzzyFinder'
-Plugin 'JesseKPhillips/d.vim'
-Plugin 'L9'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'bling/vim-airline'
-Plugin 'Raimondi/delimitMate'
-Plugin 'Rename'
-Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/ListToggle'
-Plugin 'Valloric/MatchTagAlways'
-Plugin 'Valloric/Vim-Jinja2-Syntax'
-Plugin 'Valloric/python-indent'
-Plugin 'Valloric/vim-operator-highlight'
-Plugin 'Valloric/vim-valloric-colorscheme'
-Plugin 'Valloric/xmledit'
-Plugin 'YankRing.vim'
 Plugin 'Valloric/YouCompleteMe'
-" Seems more active than tpope/vim-surround
-Plugin 'anyakichi/vim-surround'
-Plugin 'bufkill.vim'
-Plugin 'cespare/vim-toml'
-Plugin 'dart-lang/dart-vim-plugin'
-Plugin 'gmarik/vundle'
-Plugin 'godlygeek/tabular'
-Plugin 'groenewege/vim-less'
-Plugin 'hail2u/vim-css3-syntax'
-Plugin 'helino/vim-json'
-Plugin 'majutsushi/tagbar'
-Plugin 'matchit.zip'
-Plugin 'mattn/emmet-vim'
-Plugin 'michaeljsmith/vim-indent-object'
-Plugin 'mileszs/ack.vim'
-Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'othree/html5.vim'
-Plugin 'othree/eregex.vim'
-Plugin 'python.vim'
-Plugin 'python_match.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'sjl/gundo.vim'
-" Problems with fugitive, re-evalute when upstream fixes the issue
-" Plugin 'sjl/splice.vim'
-" Requires extra binaries; see docs
-Plugin 'suan/vim-instant-markdown'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tomtom/tlib_vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-repeat'
-" requires compilation
-Plugin 'wincent/Command-T'
-Plugin 'wikimatze/hammer.vim'
-Plugin 'wting/rust.vim'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-notes'
-Plugin 'xolox/vim-pyref'
-Plugin 'xolox/vim-session'
+Plugin 'flazz/vim-colorschemes'
 
 call vundle#end()
 filetype plugin indent on
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                           pre-filetype tweaks                           "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" these are for the xmledit plugin
-let xml_use_xhtml = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                           reset vimrc augroup                           "
@@ -121,7 +59,7 @@ set spellfile=$HOME/dotfiles/vim/spell/en.latin1.add
 " TODO: transfer all our custom mapping to our vim_shortcuts file
 
 " DISPLAY SETTINGS
-colorscheme valloric    " sets the colorscheme
+colorscheme 256-jungle   " sets the colorscheme
 set background=dark     " enable for dark terminals
 set scrolloff=2         " 2 lines above/below cursor when scrolling
 set showmatch           " show matching bracket (briefly jump)
@@ -211,7 +149,6 @@ let g:is_posix = 1
 " at the end of the map command
 set shortmess=a
 
-" this solves the "unable to open swap file" errors on Win7
 set dir=~/tmp,/var/tmp,/tmp,$TEMP
 set undodir=~/tmp,/var/tmp,/tmp,$TEMP
 
@@ -250,15 +187,7 @@ set textwidth=80
 set colorcolumn=+1
 
 " options for formatting text; see :h formatoptions
-set formatoptions=tcroqnj
-
-if v:version >= 704
-  " The new Vim regex engine is currently slooooow as hell which makes syntax
-  " highlighting slow, which introduces typing latency.
-  " Consider removing this in the future when the new regex engine becomes
-  " faster.
-  set regexpengine=1
-endif
+" set formatoptions=tcroqnj
 
 " The alt (option) key on macs now behaves like the 'meta' key. This means we
 " can now use <m-x> or similar as maps. This is buffer local, and it can easily
@@ -519,252 +448,6 @@ vnoremap > >gv
 "                       ***  HERE BE PLUGINS  ***                         "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Command-T                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:CommandTMaxHeight = 30
-let g:CommandTMatchWindowReverse = 1 " shows results in reverse order
-let g:CommandTFileScanner = 'find'
-let g:CommandTTraverseSCM = 'pwd'
-
-set wildignore+=*.o,*.obj,.git,*.pyc,*.so,blaze*,READONLY,llvm,Library*
-set wildignore+=CMakeFiles,packages/*,**/packages/*
-
-" This appears to be necessary; command-t doesn't appear to be falling back to
-" wildignore on its own.
-let g:CommandTWildIgnore=&wildignore
-
-" MacVim doesn't use tab focus to switch from command-t input field to the file
-" list, so using j and k for next and prev screws everything up. But it does
-" work on linux so let's use it there.
-if has("gui_gtk2")
-    let g:CommandTSelectNextMap = [ '<down>' ]
-    let g:CommandTSelectPrevMap = [ '<up>' ]
-endif
-
-nnoremap <leader>t :CommandT<cr>
-nnoremap <leader>n :CommandTBuffer<cr>
-nnoremap <leader>' :CommandTFlush<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 Gundo                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" f5 toggles the Gundo plugin window
-nnoremap <F5> :GundoToggle<CR>
-let g:gundo_width=80
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                yankring                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:yankring_history_dir = '$HOME/tmp/vim'
-" this is so that single char deletes don't end up in the yankring
-let g:yankring_min_element_length = 2
-let g:yankring_window_height = 14
-nnoremap <leader>r :YRShow<CR>
-
-" this makes Y yank from the cursor to the end of the line, which makes more
-" sense than the default of yanking the whole current line (we can use yy for
-" that)
-function! YRRunAfterMaps()
-    nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                session                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" you also need to run :SaveSession once to create the default.vim session that
-" will then be autoloaded/saved from then on
-
-let g:session_autoload        = 'yes'
-let g:session_autosave        = 'yes'
-let g:session_default_to_last = 'yes'
-let g:session_directory       = '~/tmp/vim/sessions'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                tabular                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" looks at the current line and the lines above and below it and aligns all the
-" equals signs; useful for when we have several lines of declarations
-nnoremap <Leader>a= :Tabularize /=<CR>
-vnoremap <Leader>a= :Tabularize /=<CR>
-nnoremap <Leader>a/ :Tabularize /\/\//l2c1l0<CR>
-vnoremap <Leader>a/ :Tabularize /\/\//l2c1l0<CR>
-nnoremap <Leader>a, :Tabularize /,/l0r1<CR>
-vnoremap <Leader>a, :Tabularize /,/l0r1<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                UltiSnips                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" we can't use <tab> as our snippet key since we use that with YouCompleteMe
-let g:UltiSnipsSnippetsDir         = $HOME . '/dotfiles/vim/UltiSnips'
-if has("gui_macvim")
-  " Ctrl conflicts with "Dvorak-Qwerty Command"
-  let g:UltiSnipsExpandTrigger       = "<m-s>"
-else
-  " Alt conflicts with Xmonad
-  let g:UltiSnipsExpandTrigger       = "<c-s>"
-endif
-let g:UltiSnipsListSnippets        = "<c-m-s>"
-let g:UltiSnipsJumpForwardTrigger  = "<right>"
-let g:UltiSnipsJumpBackwardTrigger = "<left>"
-let g:snips_author                 = 'Strahinja Val Markovic'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               easymotion                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:EasyMotion_leader_key = '<Leader>e'
-
-" Provides the equivalent of <Leader>s, which is forwards/backwards search for a
-" character.
-" has to be 'nmap', 'noremap' doesn't work
-nmap s <Plug>(easymotion-s)
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 hammer                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" This makes sure that the browser is opened in the background
-if has("gui_macvim")
-  let g:HAMMER_BROWSER_ARGS = '-g'
-endif
-
-nnoremap <leader>m :w<cr>:Hammer<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                ack.vim                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if executable('ag')
-  let g:ackprg = "ag --nocolor --nogroup --column"
-elseif executable('ack-grep')
-  let g:ackprg = "ack-grep --nocolor --nogroup --column"
-elseif executable('ack')
-  let g:ackprg = "ack --nocolor --nogroup --column"
-endif
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               ListToggle                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:lt_location_list_toggle_map = '<leader>i'
-let g:lt_quickfix_list_toggle_map = '<leader>u'
-let g:lt_height = 25
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                bufkill                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Use the arrows for something useful
-" :BB switches to the previous buffer shown in the current window, :BF switches
-" to the next one; it's like a buffer history for every window
-" noremap <right> :BF<cr>
-" noremap <left> :BB<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                              fuzzyfinder                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" This turns on the mrufile and mrucmd modes
-let g:fuf_modesDisable    = []
-let g:fuf_mrufile_maxItem = 1000
-let g:fuf_mrucmd_maxItem  = 400
-let g:fuf_file_exclude    = '\v\~$|\.(o|exe|dll|bak|class|meta|lock|orig|jar|swp)$|/test/data\.|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
-
-nnoremap <Leader>fm :FufMruFile<CR>
-nnoremap <Leader>fc :FufMruCmd<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                fswitch                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" A "companion" file is a .cpp file to an .h file and vice versa
-
-" Opens the companion file in the current window
-nnoremap <Leader>sh :FSHere<cr>
-
-" Opens the companion file in the window to the left (window needs to exist)
-" This is actually a duplicate of the :FSLeft command which for some reason
-" doesn't work.
-nnoremap <Leader>sl :call FSwitch('%', 'wincmd l')<cr>
-
-" Same as above, only opens it in window to the right
-nnoremap <Leader>sr :call FSwitch('%', 'wincmd r')<cr>
-
-" Creates a new window on the left and opens the companion file in it
-nnoremap <Leader>sv :FSSplitLeft<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                vim-git                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Turn on spell checking by default for git commit messages
-au vimrc FileType gitcommit setlocal spell! spelllang=en_us
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                tagbar                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:tagbar_left = 1
-let g:tagbar_sort = 0
-if has("gui_macvim")
-  let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
-endif
-
-nnoremap <F4> :TagbarToggle<cr><c-w>=
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               vimpager                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" vimpager is actually not a plugin but a shell file
-" https://github.com/rkitover/vimpager
-let vimpager_use_gvim = 1
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               delimitMate                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-au vimrc FileType html,xhtml,markdown let b:delimitMate_matchpairs = "(:),[:],{:}"
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                              vim-css-color                              "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:cssColorVimDoNotMessMyUpdatetime = 1
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                              zencoding-vim                              "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:user_zen_leader_key = '<c-b>'
-let g:user_zen_settings = {
-      \  'indentation' : '  '
-      \}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                vim-notes                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:notes_directories = ['~/notes']
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                syntastic                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_python_flake8_args = '--select=F,C9 --max-complexity=10'
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                              YouCompleteMe                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -779,42 +462,3 @@ nnoremap <leader>pg :YcmCompleter GoTo<CR>
 nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                Airline                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'tomorrow'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = '<'
-let g:airline#extensions#tabline#left_alt_sep = '|'
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                            vim-indent-guides                            "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_color_change_percent = 7
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                             MatchTagAlways                              "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:mta_use_matchparen_group = 0
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 eregex                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:eregex_default_enable = 0
-
-" Toggles '/' to mean eregex search or normal Vim search
-nnoremap <leader>/ :call eregex#toggle()<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                          vim-instant-markdown                           "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:instant_markdown_autostart = 0

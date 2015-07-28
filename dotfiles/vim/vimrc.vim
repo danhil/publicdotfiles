@@ -20,6 +20,8 @@ call vundle#begin()
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'flazz/vim-colorschemes'
+" Display tags in sidebar
+Plugin 'majutsushi/tagbar'
 
 call vundle#end()
 filetype plugin indent on
@@ -443,6 +445,9 @@ noremap <leader>ss :setlocal spell! spelllang=en_us<cr>
 vnoremap < <gv
 vnoremap > >gv
 
+" Remap ctrl+] to ctrl+G
+nmap <C-G> <C-]>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                       ***  HERE BE PLUGINS  ***                         "
@@ -461,4 +466,16 @@ nnoremap <leader>y :YcmForceCompileAndDiagnostics<cr>
 nnoremap <leader>pg :YcmCompleter GoTo<CR>
 nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""TAGBAR""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:tagbar_left = 1
+let g:tagbar_sort = 0
+if has("gui_macvim")
+  let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+endif
+" F4 to toggle sidebar
+nnoremap <F4> :TagbarToggle<cr><c-w>=
 
